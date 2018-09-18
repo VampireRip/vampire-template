@@ -32,7 +32,7 @@
 </style>
 
 <template>
-  <nav class="navbar is-transparent is-fixed-top" :id="$options.name" :class="$options.name">
+  <nav class="navbar is-transparent" :id="$options.name" :class="$options.name">
     <div class="container">
       <div class="navbar-brand">
         <a class="navbar-item" href="https://bulma.io">

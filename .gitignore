@@ -73,6 +73,7 @@ typings/
 .serverless
 
 # .idea
+.idea
 .idea/workspace.xml
 
 # dist files
