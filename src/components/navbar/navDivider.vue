@@ -36,5 +36,5 @@
 </style>
 
 <template>
-  <div :id="$options.name" :class="$options.name"> </div>
+  <div :class="$options.name"> </div>
 </template>

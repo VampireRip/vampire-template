@@ -23,4 +23,5 @@ dev.module.rules.map((obj)=>{
   // }
 });
 dev.resolve.alias.vue = 'vue/dist/vue.js';
+dev.resolve.alias['api-config'] = path.resolve(__dirname, 'api.dev.js');
 module.exports = dev;

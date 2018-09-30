@@ -28,7 +28,7 @@
 </style>
 
 <template>
-  <router-link :id="$options.name" :class="$options.name" class="navbar-item" :to="to">
+  <router-link :class="$options.name" class="navbar-item" :to="to">
     <span class="icon"><i class="fas" :class="icon"></i></span>
     <span><slot></slot></span>
   </router-link>
