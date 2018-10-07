@@ -15,13 +15,6 @@ dev.module.rules.map((obj)=>{
       'sass-loader',
     ]
   }
-  // else if(obj.test.test('.scss')) {
-  //   obj.use = [
-  //     'style-loader',
-  //     'css-loader',
-  //     'sass-loader',
-  //   ]
-  // }
 });
 dev.resolve.alias.vue = 'vue/dist/vue.js';
 dev.resolve.alias['api-config'] = path.resolve(__dirname, 'api.dev.js');

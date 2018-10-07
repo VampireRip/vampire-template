@@ -1,5 +1,12 @@
 This is the template of Vampire Project
 
+// TODO:
+
++ 移除 bulma，太大了 太菜了
++ 异步加载区块优化
+  `@babel/plugin-syntax-dynamic-import` `@babel/plugin-transform-runtime` `@babel/runtime`
++ font-awesome 的 tree shaking
+
 ### Deployment
 
 + Download `git` for windows [(Link)](https://git-scm.com/downloads)

@@ -1,41 +1,36 @@
 <script>
-  import { mapState, mapMutations } from 'vuex'
-  export default {
-    name: 'template',
-    data() {
-      return {
+import {mapState, mapMutations} from 'vuex';
 
-      }
-    },
-    beforeMount() {
+export default {
+  name: 'template',
+  data() {
+    return {};
+  },
+  beforeMount() {
 
-    },
-    mounted() {
+  },
+  mounted() {
 
-    },
-    destroyed() {
+  },
+  destroyed() {
 
-    },
-    computed: {
-      ...mapState({
-
-      })
-    },
-    methods: {
-      ...mapMutations({
-
-      })
-    },
-  };
+  },
+  computed: {
+    ...mapState({}),
+  },
+  methods: {
+    ...mapMutations({}),
+  },
+};
 
 </script>
-<!-- vue-loader's scoped css won't work with style-loader -->
+
 <style scoped lang="vcss">
 
 </style>
 
 <template>
-  <div :id="$options.name" :class="$options.name">
+<div :id="$options.name" :class="$options.name">
 
-  </div>
+</div>
 </template>
