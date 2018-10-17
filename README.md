@@ -2,9 +2,9 @@ This is the template of Vampire Project
 
 // TODO:
 
-+ 移除 bulma，太大了 太菜了
 + 异步加载区块优化
-  `@babel/plugin-syntax-dynamic-import` `@babel/plugin-transform-runtime` `@babel/runtime`
++ Message Event 和图标
++ 自己的 CSS
 + font-awesome 的 tree shaking
 
 ### Deployment
@@ -21,13 +21,7 @@ This is the template of Vampire Project
 + [Vue](https://vuejs.org/)
 + [Vuex](https://vuex.vuejs.org/)
 + [Vue Router](https://router.vuejs.org/)
-+ [Bulma](https://bulma.io/)
 
 ### Why not webpack-merge?
 
 It merges Function -> string... wasting my sometime to debug, I hate it.
-
-### Why vcss?
-
-vue-loader won't work with style-loader/url...
-

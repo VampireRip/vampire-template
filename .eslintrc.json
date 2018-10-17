@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "google",
+    "plugin:vue/essential"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  }
+}

@@ -1,29 +1,23 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const BabelPluginProposalObjectRestSpread = require('@babel/plugin-proposal-object-rest-spread');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const distPath = path.resolve(__dirname, './public');
 
 module.exports = {
   entry: {
-    app: './src/index.js',
+    entry: './src/entry.js',
   },
   mode: 'production',
   plugins: [
-    new CleanWebpackPlugin([distPath]),
     new HtmlWebpackPlugin({
       title: '<Template>',
       template: './src/index.html',
       filename: 'index.html',
     }),
     new VueLoaderPlugin(),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].ext.[hash:7].css',
-      chunkFilename: 'css/[id].[hash:7].css',
-    }),
+    new CleanWebpackPlugin([distPath]),
   ],
   resolve: {
     alias: {
@@ -41,35 +35,19 @@ module.exports = {
         loader: 'vue-loader',
       },
       {
-        test: /\.vcss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader'
-        ],
-      },
-      {
         test: /\.css$/,
         use: [
-          'style-loader/url',
-          {
-            loader: 'file-loader',
-            options: {
-              name: 'css/[name].[hash:7].css',
-            },
-          },
+          'style-loader',
+          {loader: 'css-loader', options: {importLoaders: 2}},
+          'postcss-loader',
         ],
       },
       {
         test: /\.scss$/,
         use: [
-          'style-loader/url',
-          {
-            loader: 'file-loader',
-            options: {
-              name: 'css/[name].[hash:7].css',
-            },
-          },
+          'style-loader',
+          {loader: 'css-loader', options: {importLoaders: 2}},
+          'postcss-loader',
           'sass-loader',
         ],
       },
@@ -84,11 +62,15 @@ module.exports = {
               'targets': {
                 'chrome': '58',
                 'ie': '11',
-                'safari': '10.1'
+                'safari': '10.1',
               },
-            }]
+            }],
           ],
-          plugins: [BabelPluginProposalObjectRestSpread]
+          plugins: [
+            '@babel/plugin-proposal-object-rest-spread',
+            '@babel/plugin-syntax-dynamic-import',
+            '@babel/plugin-transform-runtime',
+          ],
         },
       },
       {
@@ -136,7 +118,8 @@ module.exports = {
     contentBase: '.',
   },
   output: {
-    filename: 'scripts/[name].[hash:7].js',
+    filename: 'entry.js',
+    chunkFilename: 'scripts/[name].[chunkhash:7].js',
     path: distPath,
   },
 };
