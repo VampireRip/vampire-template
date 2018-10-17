@@ -1,27 +1,27 @@
 <script>
-  import { mapState, mapMutations } from 'vuex'
-  export default {
-    name: 'home',
-    beforeMount() {
+import {mapState, mapMutations} from 'vuex';
+export default {
+  name: 'home',
+  beforeMount() {
 
-    },
-    mounted() {
+  },
+  mounted() {
 
-    },
-    destroyed() {
+  },
+  destroyed() {
 
-    },
-    computed: {
-      ...mapState({
-        count: state=>state.count
-      })
-    },
-    methods: {
-      ...mapMutations({
-        increment: 'increment'
-      })
-    },
-  };
+  },
+  computed: {
+    ...mapState({
+      count: (state)=>state.count,
+    }),
+  },
+  methods: {
+    ...mapMutations({
+      increment: 'increment',
+    }),
+  },
+};
 
 </script>
 

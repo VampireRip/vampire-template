@@ -13,7 +13,7 @@ Vue.use(Vuex);
 const routes = {};
 
 const components = require.context('./components', true, /.vue$/, 'lazy');
-components.keys().forEach(fileName => {
+components.keys().forEach((fileName) => {
   const name = /\/?([^/]+?).vue$/.exec(fileName)[1];
   const nameLower = name.replace(/([A-Z])/g, '-$1').toLowerCase();
   routes[name] = Vue.component(nameLower, async () => {
@@ -45,7 +45,7 @@ const app = new Vue({
   store,
   data: {
     messageID: 0,
-    messages: []
+    messages: [],
   },
   beforeUpdate() {
 
@@ -60,18 +60,20 @@ const app = new Vue({
         id: this.messageID++,
         source,
         content,
-        type
+        type,
       });
     },
     deleteMessage(id) {
-      for (let i = 0; i < this.messages.length; i++)
-        if (this.messages[i].id === id)
+      for (let i = 0; i < this.messages.length; i++) {
+        if (this.messages[i].id === id) {
           return this.messages.splice(i, 1);
-    }
-  }
+        }
+      }
+    },
+  },
 });
 
-window.addEventListener('message', e => {
+window.addEventListener('message', (e) => {
   const {data} = e;
   if (data.type === 'notice') {
     app.pushMessage(data.payload);

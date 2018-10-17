@@ -1,15 +1,15 @@
 // chrome --disable-web-security --allow-file-access-from-files --unsafely-treat-insecure-origin-as-secure=http://localhost --user-data-dir=%TEMP%
 
 const CACHE_NAME = 'cache_vampire';
-const known_clients = new Set();
+const knownClients = new Set();
 const selfDestroyTimer = {};
 
 const postMessageToClient = (clientId, message) =>
-    Promise.resolve().then(() =>
-        clients.get(clientId),
-    ).then(client =>
-        client.postMessage(message),
-    );
+  Promise.resolve().then(() =>
+    clients.get(clientId),
+  ).then((client) =>
+    client.postMessage(message),
+  );
 
 self.addEventListener('install', function(event) {
   console.log('serviceWorker installed.');
@@ -29,12 +29,12 @@ self.addEventListener('fetch', function(event) {
     return;
   }
   const {clientId} = event;
-  if(!known_clients.has(clientId) && clientId) {
-    known_clients.add(clientId);
+  if (!knownClients.has(clientId) && clientId) {
+    knownClients.add(clientId);
     selfDestroyTimer[clientId] = setTimeout(() => {
       self.registration.unregister().then(
           () => console.log(`found bad client ${clientId}, get rid of it`)
-      )
+      );
     }, 2000);
     console.log('found new clients:', clientId);
   }
@@ -52,87 +52,88 @@ self.addEventListener('fetch', function(event) {
               }
               if (!response || response.status !== 200 || response.type !==
                   'basic' || (!/\.(png|jpe?g|gif|svg|mp4|js|css)(\?.*)?$/.test(
-                      response.url))) {
+                  response.url))) {
                 return response;
               }
               const responseToCache = response.clone();
-              caches.open(CACHE_NAME).then(cache =>
-                  cache.keys().then(entries => {
-                    const regex = /^(.+\/.+?\.).{7}\.(.{1,4})/;
-                    const key = regex.exec(event.request.url);
-                    if (key)
-                      for (let i of entries) {
-                        const target = regex.exec(i.url);
-                        if (!target) continue;
-                        if ((key[2] === target[2]) && (key[1] === target[1])) {
-                          cache.delete(i).
-                              then(() => console.log('deleted previous cache',
-                                  i.url));
-                        }
+              caches.open(CACHE_NAME).then((cache) =>
+                cache.keys().then((entries) => {
+                  const regex = /^(.+\/.+?\.).{7}\.(.{1,4})/;
+                  const key = regex.exec(event.request.url);
+                  if (key) {
+                    for (const i of entries) {
+                      const target = regex.exec(i.url);
+                      if (!target) continue;
+                      if ((key[2] === target[2]) && (key[1] === target[1])) {
+                        cache.delete(i).
+                            then(() => console.log('deleted previous cache',
+                                i.url));
                       }
-                    return cache;
-                  }),
-              ).then(cache =>
-                  cache.put(event.request, responseToCache),
+                    }
+                  }
+                  return cache;
+                }),
+              ).then((cache) =>
+                cache.put(event.request, responseToCache),
               );
               return response;
             },
-        ).catch(err => {
-          postMessageToClient(clientId, {error: 'ERR_CONNECTION_FAILED'});
+        ).catch((err) => {
+          postMessageToClient(clientId, {error: 'ERR_CONNECTION_FAILED', err});
         });
       }),
   );
 });
 
 const handleCache = (path, cache) =>
-    Promise.resolve().then(() =>
-        fetch(path),
-    ).then(response => {
-      if (!response.ok) return false;
-      let newText;
-      let clone = response.clone();
-      return clone.text().then(text => {
-        newText = text;
-        return cache.match(path).
-            then(response => response.text()).
-            catch(() => undefined);
-      }).then(oldText => {
-        if (oldText !== newText) {
-          cache.put(path, response);
-          return oldText !== undefined;
-        }
-        return false;
-      });
-    }).catch(() =>
-        false,
-    );
+  Promise.resolve().then(() =>
+    fetch(path),
+  ).then((response) => {
+    if (!response.ok) return false;
+    let newText;
+    const clone = response.clone();
+    return clone.text().then((text) => {
+      newText = text;
+      return cache.match(path).
+          then((response) => response.text()).
+          catch(() => undefined);
+    }).then((oldText) => {
+      if (oldText !== newText) {
+        cache.put(path, response);
+        return oldText !== undefined;
+      }
+      return false;
+    });
+  }).catch(() =>
+    false,
+  );
 
-self.addEventListener('message', message => {
+self.addEventListener('message', (message) => {
   const clientId = message.source.id;
-  switch (message.data.type){
+  switch (message.data.type) {
     case 'ready':
       clearTimeout(selfDestroyTimer[clientId]);
       delete selfDestroyTimer[clientId];
       let cache;
       let hasUpdate = false;
       Promise.resolve().then(() =>
-          caches.open(CACHE_NAME),
-      ).then(_cache =>
-          cache = _cache,
+        caches.open(CACHE_NAME),
+      ).then((_cache) =>
+        cache = _cache,
       ).then(() =>
-          handleCache('/', cache),
-      ).then(updated =>
-          hasUpdate = updated || hasUpdate,
+        handleCache('/', cache),
+      ).then((updated) =>
+        hasUpdate = updated || hasUpdate,
       ).then(() =>
-          handleCache('/entry.js', cache),
-      ).then(updated =>
-          hasUpdate = updated || hasUpdate,
+        handleCache('/entry.js', cache),
+      ).then((updated) =>
+        hasUpdate = updated || hasUpdate,
       ).then(() =>
-          clientId ? postMessageToClient(clientId, {updated: hasUpdate}) : false,
+        clientId && postMessageToClient(clientId, {updated: hasUpdate})
       );
       break;
     case 'ping':
-      known_clients.add(clientId);
+      knownClients.add(clientId);
       break;
   }
 });

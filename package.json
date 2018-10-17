@@ -17,6 +17,7 @@
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@fortawesome/fontawesome-free": "^5.4.1",
+    "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.4",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^1.0.0",
@@ -53,6 +54,7 @@
   },
   "lint-staged": {
     "*.{js,vue}": [
+      "eslint --fix"
     ]
   }
 }
